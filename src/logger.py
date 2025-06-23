@@ -1,20 +1,24 @@
 import logging
 import os
+import sys
 from datetime import datetime
 
+# Generate a log filename with a timestamp
 LOG_FILE = f"log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
-logs_path = os.path.join(os.getcwd(), "logs", LOG_FILE)
-os.makedirs(logs_path, exist_ok=True)
 
-LOG_FILE_PATH = os.path.join(logs_path, LOG_FILE)
+# Create a logs folder (not including filename)
+logs_folder = os.path.join(os.getcwd(), "logs")
+os.makedirs(logs_folder, exist_ok=True)
 
-# Configure logging
+# Full path to the log file
+LOG_FILE_PATH = os.path.join(logs_folder, LOG_FILE)
+
+# Set up logging: logs to file + prints to terminal
 logging.basicConfig(
-    filename=LOG_FILE_PATH,
-    format= " [ %(asctime)s ] %(lineno)d %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO,
-
+    format=" [ %(asctime)s ] %(lineno)d %(name)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler(LOG_FILE_PATH),
+        logging.StreamHandler(sys.stdout)
+    ]
 )
-
-
-
